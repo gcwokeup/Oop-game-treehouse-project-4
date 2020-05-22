@@ -54,13 +54,22 @@ class Game {
    * @param (HTMLButtonElement) button - The clicked button element */
   handleInteraction(button) {
     console.log(button);
+    let onScreenButton =
+        Array.from(document.querySelectorAll('.key')).find(
+            el => el.textContent === button
+        );
+    onScreenButton.disabled = true;
     let phraseContainsLetter = this.activePhrase.checkLetter(button)
+
     if (phraseContainsLetter) {
+      onScreenButton.classList.add("chosen");
       this.activePhrase.showMatchedLetter(button);
       if (this.checkForWin()) {
         this.gameOver(true)
       }
+
     } else {
+      onScreenButton.classList.add("wrong");
       this.removeLife();
     }
 
@@ -82,7 +91,7 @@ class Game {
   removeLife() {
     let heartIndex = this.missed;
     this.missed += 1;
-    if(this.missed === 5) {
+    if(this.missed > 4) {
       this.gameOver(false);
     }
 
@@ -112,10 +121,16 @@ class Game {
       phraseElement.removeChild(phraseElement.firstChild);
     }
 
-    // Reset hearts
+    Array.from(document.querySelectorAll('.key')).forEach((key) => {
+      key.className = "key";
+    })
+  };
+
+  // Reset hearts
+  resetHearts() {
     document.querySelectorAll(
         '.tries'
-    ).forEach( (oneTry) => {
+    ).forEach((oneTry) => {
       oneTry.childNodes[0].src = "images/liveHeart.png";
     });
   };
