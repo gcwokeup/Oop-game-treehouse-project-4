@@ -48,4 +48,75 @@ class Game {
     this.activePhrase = this.getRandomPhrase();
     this.activePhrase.addPhraseToDisplay();
   };
+
+  /**
+   * Handles onscreen keyboard button clicks
+   * @param (HTMLButtonElement) button - The clicked button element */
+  handleInteraction(button) {
+    console.log(button);
+    let phraseContainsLetter = this.activePhrase.checkLetter(button)
+    if (phraseContainsLetter) {
+      this.activePhrase.showMatchedLetter(button);
+      if (this.checkForWin()) {
+        this.gameOver(true)
+      }
+    } else {
+      this.removeLife();
+    }
+
+  };
+
+  /**
+   * Checks for winning move
+   * @return {boolean} True if game has been won, false if game wasn't
+   won */
+  checkForWin() {
+    return document.querySelectorAll('.hide').length === 0;
+  };
+
+  /**
+   * Increases the value of the missed property
+   * Removes a life from the scoreboard
+   * Checks if player has remaining lives and ends game if player is out
+   */
+  removeLife() {
+    let heartIndex = this.missed;
+    this.missed += 1;
+    if(this.missed === 5) {
+      this.gameOver(false);
+    }
+
+    document.querySelectorAll(
+        '.tries'
+    )[heartIndex].childNodes[0].src = "images/lostHeart.png";
+  };
+
+  /**
+   * Displays game over message
+   * @param {boolean} gameWon - Whether or not the user won the game */
+  gameOver(gameWon) {
+    if (gameWon) {
+      document.getElementById('game-over-message').innerText = "Yay! You figured it out!"
+      document.getElementById('overlay').className = "start win";
+    } else {
+      document.getElementById('game-over-message').innerText  = "Aww! I bet you can win next game."
+      document.getElementById('overlay').className = "start lose";
+    }
+
+    // show overlay
+    document.getElementById('overlay').style.display = 'flex';
+
+    // Remove all phrase letters
+    let phraseElement = document.getElementById('phrase').firstElementChild;
+    while (phraseElement.firstChild) {
+      phraseElement.removeChild(phraseElement.firstChild);
+    }
+
+    // Reset hearts
+    document.querySelectorAll(
+        '.tries'
+    ).forEach( (oneTry) => {
+      oneTry.childNodes[0].src = "images/liveHeart.png";
+    });
+  };
 }
