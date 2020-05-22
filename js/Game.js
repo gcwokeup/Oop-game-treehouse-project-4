@@ -123,6 +123,7 @@ class Game {
 
     Array.from(document.querySelectorAll('.key')).forEach((key) => {
       key.className = "key";
+      key.disabled = false;
     })
   };
 

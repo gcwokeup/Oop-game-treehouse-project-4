@@ -9,18 +9,16 @@ document.getElementById('btn__reset').addEventListener("click", () => {
   game = new Game();
   game.startGame();
   game.resetHearts();
-});
-
-
-document.querySelectorAll('.key').forEach(key => {
-  key.addEventListener(
-      "click",
-      (button) => {
-        if (!button.disabled) {
-          const letterPressed = button.target.innerHTML;
-          game.handleInteraction(letterPressed)
-        }
-      },
-      {once: true}
-  )
+  document.querySelectorAll('.key').forEach(key => {
+    key.addEventListener(
+        "click",
+        (button) => {
+          if (!button.disabled) {
+            const letterPressed = button.target.innerHTML;
+            game.handleInteraction(letterPressed)
+          }
+        },
+        {once: true}
+    )
+  });
 });
